@@ -1,0 +1,9 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/DungLe939/FE-HireUS-Tools.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/DungLe939/BE-HireUS-Tools.git
+[submodule "documents"]
+	path = documents
+	url = https://github.com/DungLe939/Docs-HireUS-Tools.git
