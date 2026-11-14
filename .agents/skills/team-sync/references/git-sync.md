@@ -6,25 +6,30 @@ Chạy tại từng repo cần làm: `git status --short --branch`, `git branch 
 `git diff`, `git diff --cached` và kiểm tra file mới liên quan. Xem submodule từ
 repo cha; nhánh/working tree/upstream của từng repo là độc lập.
 
-Giữ nhánh `<thành-viên>/<epic>` đang làm. Lấy upstream đã xác minh làm đích cập nhật,
-không tự lấy `main` hoặc nhánh có commit mới nhất. Nếu chưa có upstream, xác định
-remote/nhánh đích từ yêu cầu và cấu hình; có nhiều đích không rõ mới hỏi phần đó.
+Giữ nhánh `<thành-viên>/<epic>` đang làm. Khi bắt đầu việc có sửa, nguồn cập nhật nền
+mặc định là `origin/main` theo quy ước nhóm; chỉ dẫn đích khác được ưu tiên.
+Upstream cá nhân là đích công bố riêng, không dùng nó thay main để kiểm tra code nền.
+Khi công bố, xác minh remote/ref đích từ yêu cầu và cấu hình; nhiều đích không rõ mới hỏi.
 Không tạo/chuyển nhánh để xử lý một yêu cầu chỉ cập nhật nhánh hiện tại.
 
 ## Fetch và tích hợp
 
-- Fetch remote liên quan khi được yêu cầu cập nhật hoặc chuẩn bị push. Yêu cầu
+- Tự fetch và tích hợp main trước việc có sửa code/tài liệu chung; không cần hỏi lại
+  quyền cập nhật đã được nhóm cho phép. Dùng helper `sync_main.py` hoặc Git tương đương.
+  Chỉ đọc/review/plan riêng/offline thì không tự tích hợp. Yêu cầu
   lấy mọi nhánh thì cập nhật remote-tracking refs của các repo trong phạm vi;
   không checkout, pull hay merge từng nhánh mới.
 - Sau fetch, so sánh ahead/behind và diff so với đúng ref đích. Không lấy thời gian
   commit làm bằng chứng nội dung nào đúng về nghiệp vụ.
-- Working tree sạch, nhánh chỉ behind: `git pull --ff-only` theo upstream đã xác minh
-  hoặc fast-forward đúng ref vừa fetch. Chạy lại kiểm tra phần tích hợp tác động.
+- Working tree sạch, nhánh chỉ behind: fast-forward đúng SHA main vừa fetch, giữ nhánh.
+  Khi phân kỳ sạch, merge bình thường bảo toàn lịch sử; merge commit tích hợp được phép
+  tự tạo, không gồm feature commit. Dùng `--no-autostash --no-overwrite-ignore`, không
+  checkout tự động repo con. Chạy lại kiểm tra phần tích hợp tác động.
 - Working tree bẩn: fetch vẫn được; không tự stash, reset/clean, ghi đè hoặc đưa
   thay đổi ngoài phạm vi vào commit. Khi đã được yêu cầu push, có thể commit phần
   việc liên quan trước khi tích hợp. Nếu thay đổi khác cản trở, dùng checkout/worktree
   tách biệt khi phù hợp hoặc hỏi cách giữ phần chưa rõ; tiếp tục phần độc lập.
-- Nhánh phân kỳ: xem hai phía trước. Yêu cầu cập nhật/push cho phép xử lý merge
+- Nhánh phân kỳ: xem hai phía. Quyền tự cập nhật đầu việc hoặc yêu cầu cập nhật/push cho phép merge
   thông thường với chính upstream đã xác minh, bảo toàn lịch sử. Không tự rebase
   nhánh đã chia sẻ, đổi upstream hoặc merge nhánh khác để vượt lỗi fast-forward.
 

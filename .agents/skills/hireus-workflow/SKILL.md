@@ -13,7 +13,8 @@ Dùng file/shell/connector của agent hiện tại; không yêu cầu một hã
 
 Xác định phân hệ, hành vi cần hoàn thành, tiêu chí nghiệm thu và repo cần sửa.
 Kiểm tra nhánh, code và thay đổi local ở từng repo theo
-[team-sync](../team-sync/SKILL.md); nhắc cập nhật nguồn khi bắt đầu nếu chưa làm.
+[team-sync](../team-sync/SKILL.md); tự cập nhật main của repo liên quan trước khi sửa,
+giữ các thay đổi local. Việc chỉ lập plan riêng không kích hoạt tích hợp Git tự động.
 Ghi nguồn và revision liên quan; hỏi chỉ phần thiếu ảnh hưởng hành vi/quyền/dữ liệu,
 đồng thời tiếp tục công việc độc lập.
 

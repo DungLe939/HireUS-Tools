@@ -7,7 +7,7 @@ Bắt đầu tại [AGENTS.md](../AGENTS.md). Agent không tự nhận skills v�
 | --- | --- |
 | Đọc dự án hoặc tìm yêu cầu mới nhất | [project-navigator](skills/project-navigator/SKILL.md) |
 | Làm một tính năng qua nhiều repo | [hireus-workflow](skills/hireus-workflow/SKILL.md) |
-| Nhắc cập nhật nhánh, chuẩn bị commit/push hoặc xử lý remote đi trước | [team-sync](skills/team-sync/SKILL.md) |
+| Tự cập nhật main đầu việc, chuẩn bị commit/push hoặc xử lý remote đi trước | [team-sync](skills/team-sync/SKILL.md) |
 | Sync repo con và gitlink repo cha, xác minh công bố toàn workspace | [submodule-sync](skills/submodule-sync/SKILL.md) |
 | Rà tài liệu còn đúng không, cập nhật tổng hợp hoặc bỏ bản lỗi thời | [docs-maintenance](../documents/.agents/skills/docs-maintenance/SKILL.md) |
 | Frontend | [hướng dẫn FE](../frontend/AGENTS.md) |
@@ -20,17 +20,31 @@ Ví dụ yêu cầu, có thể dùng bằng ngôn ngữ tự nhiên với bất 
 - “Dùng hireus-workflow triển khai phần xác nhận dữ liệu theo tiêu chí đã thống nhất.”
 - “Trong backend, dùng backend-quality review diff hiện tại, chỉ báo lỗi có căn cứ.”
 - “Trong documents, kiểm tra bản Markdown/HTML theo template Week02, chưa sửa bài nguồn.”
-- “Bắt đầu làm Job Matching: kiểm tra nhánh và nhắc phần cần cập nhật trước.”
+- “Làm Job Matching”: agent tự cập nhật main của repo liên quan trước khi sửa.
 - “Chuẩn bị push phần vừa làm: lấy thay đổi remote, rà tài liệu cũ, sửa phần sai và tổng hợp kết quả.”
 - “Push bị non-fast-forward: kiểm tra upstream, tích hợp thay đổi và kiểm tra lại tài liệu.”
 - “Kiểm tra repo tổng có đang ghim commit cũ của repo con không, đích là main.”
 - “Công bố workspace lên main: xử lý repo con, gitlink repo cha và xác minh remote cuối cùng.”
 
-Khi bắt đầu việc có sửa, agent kiểm tra nhánh và nhắc cập nhật một lần nếu cần.
+Khi bắt đầu việc có sửa code/tài liệu chung, agent tự fetch và tích hợp main của repo
+liên quan một lần, giữ nhánh hiện tại. Có thể tạo merge commit tích hợp khi tree sạch.
+Nếu tree bẩn cần tích hợp, conflict hoặc lỗi mạng thì giữ phần local, báo phần chưa
+cập nhật và tiếp tục việc độc lập; không tự stash, reset, bỏ hook hoặc ghi đè file ignored.
 Trước push, agent đối chiếu tài liệu liên quan, sửa/bỏ bản dẫn xuất đã lỗi thời,
 chạy kiểm tra và tổng hợp thay đổi rồi công bố trong phạm vi đã được yêu cầu.
 Không phải mọi lần push đều cần tải Drive hoặc tạo một báo cáo mới.
 Đây là workflow cho agent đọc, không phải hook tự cài hoặc tác vụ chạy nền.
+
+Helper thực hiện cập nhật (chọn repo đúng phạm vi, đích mặc định `main`):
+
+```bash
+python3 .agents/scripts/sync_main.py --repo frontend --repo documents
+```
+
+Kết quả JSON: `up_to_date`, `fast_forwarded`, `merged` hoặc `needs_attention`.
+Mã thoát 0 = đã tích hợp/đã chứa đích vừa fetch; 2 = có repo cần xử lý thêm.
+Đây là cập nhật local, không push, stage gitlink cha hay merge GitHub.
+Chỉ đọc/review/plan riêng hoặc được yêu cầu offline/không sync thì không tự cập nhật.
 
 Với nhiều repo, quy trình chỉ hoàn tất công bố sau khi **repo con đã công bố →
 gitlink được cập nhật → repo cha đã công bố → xác minh live đạt**. Chỉ sync local
@@ -56,4 +70,5 @@ Kiểm tra bộ script workspace:
 `python3 -m unittest discover -s .agents/scripts/tests -v`.
 
 Skills, references, tests, scripts và adapter cần nằm trong Git. Cache/secrets vẫn
-được ignore. Chỉ commit/push khi được yêu cầu, theo đúng repo và nhánh đang làm.
+được ignore. Chỉ commit công việc/push khi được yêu cầu, theo đúng repo và nhánh đang
+làm; merge commit tích hợp main an toàn ở đầu việc là ngoại lệ được phép ở trên.

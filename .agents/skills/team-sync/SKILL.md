@@ -1,6 +1,6 @@
 ---
 name: team-sync
-description: Kiểm tra nhánh trước khi làm, cập nhật Git khi được yêu cầu và chuẩn bị commit/push HireUS; đối chiếu tài liệu, tổng hợp thay đổi và xử lý remote đi trước.
+description: Tự cập nhật từ main khi bắt đầu việc có sửa trong HireUS, giữ công việc local; đối chiếu tài liệu, chuẩn bị commit/push và xử lý remote đi trước.
 ---
 
 # Đồng bộ công việc của nhóm
@@ -13,11 +13,23 @@ Skill hướng dẫn agent, không tự cài hook hay chạy nền sau mỗi l�
 
 - Xem nhánh, upstream, thay đổi staged/unstaged/untracked và trạng thái submodule.
   Ghi HEAD làm mốc đầu việc, giữ các thay đổi có sẵn ngoài phạm vi.
-- Kiểm tra xem đã cập nhật nguồn Git cho đầu việc chưa. Nếu chưa, nhắc ngắn rằng
-  cần cập nhật trước khi dựa vào nội dung local; không lặp lại ở mọi lượt trao đổi.
-- Yêu cầu cập nhật/pull hoặc chuẩn bị push cho phép fetch các remote liên quan.
-  Đọc/review local hay sửa skill này không tự cho phép pull cả workspace.
-  Không gọi refs đã cache là mới nhất khi chưa fetch thành công.
+- Theo quyền thường trực của nhóm, **tự fetch và tích hợp `origin/main` vào nhánh
+  hiện tại** trước khi sửa code/tài liệu chung của đầu việc; không chỉ nhắc và chờ
+  người dùng nói “pull”. Đích khác được chỉ định rõ thì ưu tiên đích đó.
+  Main là nhánh nền; upstream nhánh cá nhân là đích công bố, không thay main khi sync nền.
+- Chỉ chọn repo cần sửa và repo nguồn phụ thuộc thực sự cần cập nhật; không mặc định
+  pull cả workspace. Làm một lần cho đầu việc, không mỗi tin nhắn. Khi chỉ đọc/review,
+  lập plan riêng, hoặc được yêu cầu offline/không sync thì không tự thay checkout.
+- Dùng [sync_main.py](../../../.agents/scripts/sync_main.py) từ root, ví dụ:
+  `python3 .agents/scripts/sync_main.py --repo frontend --repo documents`.
+  Clone độc lập không có script thì thực hiện tương đương theo `AGENTS.md` tại repo đó.
+  Script fetch, fast-forward hoặc tạo merge commit tích hợp khi tree sạch, giữ nhánh;
+  nếu conflict thì abort lượt merge nó vừa tạo. Không stash, reset, rebase hoặc push.
+- Tree bẩn và cần tích hợp: fetch được nhưng giữ nguyên file/index, báo phần đang
+  cản trở và tiếp tục việc độc lập. Detached HEAD/Git operation dở/mạng lỗi báo rõ;
+  không khẳng định main mới nhất từ cache. Không bỏ hook hay ghi đè file ignored.
+- Quyền tự cập nhật gồm merge commit tích hợp main khi cần, không gồm commit công
+  việc chưa lưu, stage gitlink cha, push/merge GitHub hay gửi tài liệu lên Drive.
 - Sau cập nhật, đọc lại diff của hướng dẫn, yêu cầu và contract bị ảnh hưởng.
   Fetch nhánh mới không có nghĩa đổi sang nhánh đó hoặc gộp tất cả nhánh vào nhánh cá nhân.
 - Nếu thao tác gồm repo con hoặc gitlink, đọc
