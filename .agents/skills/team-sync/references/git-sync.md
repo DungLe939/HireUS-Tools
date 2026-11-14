@@ -48,6 +48,13 @@ Lỗi quyền/mạng cần nguồn ngoài thì không giả vờ xử lý bằng
 
 ## Nhiều repo và submodule
 
+Dùng [submodule-sync](../../submodule-sync/SKILL.md) cho phần này. Chốt nhánh đích;
+checker `python3 .agents/scripts/check_submodules.py --target main --remote` chạy
+từ gốc, thay `main` theo yêu cầu. Kiểm tra trước và sau công bố: HEAD repo con,
+tip đích remote, gitlink trong HEAD/index cha và gitlink ở nhánh cha trên remote.
+Checker chỉ đọc, không tự fetch hoặc sửa con trỏ. Mã 1/2 cần đọc chi tiết, không
+coi là đã công bố thành công.
+
 Commit/push các repo con liên quan trước, kiểm tra commit đích đã hiện trên remote,
 rồi mới stage gitlink và push repo cha khi yêu cầu gồm công bố workspace.
 Không dùng `git submodule update --remote` để thay pull nhánh thành viên: nó có thể

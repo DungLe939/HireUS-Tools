@@ -20,6 +20,9 @@ Skill hướng dẫn agent, không tự cài hook hay chạy nền sau mỗi l�
   Không gọi refs đã cache là mới nhất khi chưa fetch thành công.
 - Sau cập nhật, đọc lại diff của hướng dẫn, yêu cầu và contract bị ảnh hưởng.
   Fetch nhánh mới không có nghĩa đổi sang nhánh đó hoặc gộp tất cả nhánh vào nhánh cá nhân.
+- Nếu thao tác gồm repo con hoặc gitlink, đọc
+  [submodule-sync](../submodule-sync/SKILL.md) để phân biệt checkout local,
+  nhánh đích remote và con trỏ đã công bố ở repo cha.
 
 Chi tiết về working tree bẩn, nhánh phân kỳ, push bị từ chối và gitlink nằm tại
 [xử lý Git](references/git-sync.md); đọc khi thực hiện các thao tác này.
@@ -49,6 +52,12 @@ tải Drive. Chỉ dùng `drive-sync` khi yêu cầu gồm nguồn ngoài đó; 
 không chứng minh tài liệu đã bị xóa hoặc bản local đã mới nhất.
 
 ## Bàn giao
+
+Với yêu cầu công bố/merge toàn workspace, hoàn tất chuỗi: **sync nhánh → rà tài liệu
+→ kiểm tra → push/merge repo con theo đích được giao → cập nhật gitlink → kiểm tra
+và push/merge repo cha → xác minh live cuối cùng** bằng `submodule-sync`.
+Đích là nhánh nào phải chọn rõ; checker offline hoặc lỗi mạng không đủ để báo hoàn tất.
+Khi chỉ sync local, nêu con trỏ/nhánh còn chưa công bố, không tự mở rộng sang push.
 
 Báo cập nhật được gì, tài liệu nào còn sai hoặc chưa có nguồn, kiểm tra thực sự chạy
 và kết quả Git theo từng repo. Khi push, xác minh commit/ref đích từ phản hồi Git;

@@ -24,6 +24,7 @@ chủ động đọc hướng dẫn và skill của repo con, không giả đị
 | Đọc dự án, tìm nguồn hoặc tiến độ | [.agents/skills/project-navigator/SKILL.md](.agents/skills/project-navigator/SKILL.md) |
 | Triển khai tính năng qua nhiều repo | [.agents/skills/hireus-workflow/SKILL.md](.agents/skills/hireus-workflow/SKILL.md) |
 | Bắt đầu làm, cập nhật nhánh hoặc chuẩn bị commit/push | [.agents/skills/team-sync/SKILL.md](.agents/skills/team-sync/SKILL.md) |
+| Repo con mới hơn nhưng repo tổng còn ghim commit cũ | [.agents/skills/submodule-sync/SKILL.md](.agents/skills/submodule-sync/SKILL.md) |
 | Giao diện Next.js | [frontend/AGENTS.md](frontend/AGENTS.md) |
 | API, dữ liệu, AI phía máy chủ | [backend/AGENTS.md](backend/AGENTS.md) |
 | Yêu cầu, bài nộp, Markdown/HTML, Drive | [documents/AGENTS.md](documents/AGENTS.md) |
@@ -65,6 +66,10 @@ chủ động đọc hướng dẫn và skill của repo con, không giả đị
 - Chỉ stage/commit/push khi được yêu cầu. Với thay đổi qua nhiều repo, commit/push
   submodule trước, rồi cập nhật gitlink ở repo chính khi được yêu cầu công bố toàn workspace.
   Báo từng repo; không coi một commit ở gốc là đã lưu nội dung repo con.
+- Dùng `submodule-sync` khi đồng bộ/công bố nhiều repo: chọn rõ nhánh đích, đối chiếu
+  checkout con, tip remote và gitlink cha ở HEAD/index/remote. Chỉ báo đồng bộ toàn
+  workspace sau khi repo cha đã công bố con trỏ đúng và xác minh live; sync local
+  hoặc stage gitlink chưa đủ. Không tự gộp nhánh feature khác vào đích đã chọn.
 - Khi yêu cầu cập nhật hoặc push, fetch các remote liên quan trước khi xác nhận đã
   mới nhất. Xử lý remote đi trước theo
   [hướng dẫn Git](.agents/skills/team-sync/references/git-sync.md), không force-push.
@@ -78,6 +83,7 @@ Chạy lệnh từ đúng repo, theo thay đổi thực tế:
 | --- | --- |
 | Hướng dẫn dùng chung | `python3 .agents/scripts/check_workspace.py` |
 | Script workspace | `python3 -m unittest discover -s .agents/scripts/tests -v` |
+| Gitlink/submodule, đích ví dụ là `main` | `python3 .agents/scripts/check_submodules.py --target main --remote` |
 | Tài liệu | `python3 documents/.agents/scripts/check_docs.py` |
 | Frontend | `npm run lint`, `npx tsc --noEmit`, `npm run build` |
 | Backend | `npm test -- --runInBand`, `npm run build`; e2e khi đổi luồng HTTP |
