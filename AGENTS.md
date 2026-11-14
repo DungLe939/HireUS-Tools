@@ -49,8 +49,11 @@ chủ động đọc hướng dẫn và skill của repo con, không giả đị
 
 ## Git và chia sẻ
 
-- Khi bắt đầu đầu việc có sửa, dùng `team-sync`: kiểm tra upstream/local và nhắc cập
-  nhật nhánh nếu chưa làm. Không lặp lại ở mỗi tin nhắn hoặc tự pull khi chỉ đọc local.
+- Khi bắt đầu đầu việc có sửa code/tài liệu chung, dùng `team-sync` để tự fetch và
+  tích hợp `origin/main` vào nhánh hiện tại của repo liên quan, không chờ nhắc pull.
+  Giữ nhánh và việc local; tree bẩn/conflict/mạng lỗi thì báo phần chưa sync và tiếp tục
+  việc độc lập. Chỉ đọc/review, plan riêng hoặc chỉ dẫn offline/không sync thì không tự tích hợp.
+  Thực hiện một lần mỗi đầu việc, không mỗi lượt chat. Xem `.agents/scripts/sync_main.py`.
 - Trước commit/push, tổng hợp cả commit chưa công bố và diff/file mới liên quan;
   đối chiếu code, contract, yêu cầu và tài liệu. Dùng
   [docs-maintenance](documents/.agents/skills/docs-maintenance/SKILL.md) để sửa,
@@ -66,6 +69,8 @@ chủ động đọc hướng dẫn và skill của repo con, không giả đị
 - Chỉ stage/commit/push khi được yêu cầu. Với thay đổi qua nhiều repo, commit/push
   submodule trước, rồi cập nhật gitlink ở repo chính khi được yêu cầu công bố toàn workspace.
   Báo từng repo; không coi một commit ở gốc là đã lưu nội dung repo con.
+  Ngoại lệ được nhóm cho phép: tự tạo merge commit tích hợp main khi tree sạch trong
+  bước cập nhật đầu việc; không bao gồm commit công việc chưa lưu, push hay merge GitHub.
 - Dùng `submodule-sync` khi đồng bộ/công bố nhiều repo: chọn rõ nhánh đích, đối chiếu
   checkout con, tip remote và gitlink cha ở HEAD/index/remote. Chỉ báo đồng bộ toàn
   workspace sau khi repo cha đã công bố con trỏ đúng và xác minh live; sync local
@@ -83,6 +88,7 @@ Chạy lệnh từ đúng repo, theo thay đổi thực tế:
 | --- | --- |
 | Hướng dẫn dùng chung | `python3 .agents/scripts/check_workspace.py` |
 | Script workspace | `python3 -m unittest discover -s .agents/scripts/tests -v` |
+| Tự cập nhật nền, ví dụ chỉ FE | `python3 .agents/scripts/sync_main.py --repo frontend` |
 | Gitlink/submodule, đích ví dụ là `main` | `python3 .agents/scripts/check_submodules.py --target main --remote` |
 | Tài liệu | `python3 documents/.agents/scripts/check_docs.py` |
 | Frontend | `npm run lint`, `npx tsc --noEmit`, `npm run build` |

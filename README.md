@@ -49,10 +49,13 @@ Nội dung skill không phụ thuộc một hãng agent. Khả năng tự tìm f
 skill tùy công cụ. Các file `.codex/agents/*.toml` là adapter reviewer riêng cho
 Codex; agent khác có thể thực hiện review bằng các skill chất lượng trong FE/BE.
 
-Khi bắt đầu việc có sửa, agent kiểm tra nhánh và nhắc cập nhật nếu cần. Trước push,
+Khi bắt đầu việc có sửa code/tài liệu chung, agent tự fetch và tích hợp main của repo
+liên quan vào nhánh đang làm; giữ việc local, báo trường hợp bị cản trở. Chỉ đọc,
+review, plan riêng hoặc chỉ dẫn offline/không sync thì không tự tích hợp. Trước push,
 agent đối chiếu tài liệu liên quan, sửa/bỏ bản dẫn xuất lỗi thời có căn cứ và tổng
 hợp đã làm gì, đã kiểm tra gì, phần còn thiếu. Đồng bộ tài liệu không mặc định tải
-Drive; chỉ commit/push khi được yêu cầu. Xem các skill trên cho working tree bẩn,
+Drive; chỉ commit công việc/push khi được yêu cầu, ngoại lệ là merge commit tích hợp
+main an toàn được phép tự tạo ở đầu việc. Xem các skill trên cho working tree bẩn,
 conflict, remote đi trước và thứ tự công bố submodule/repo cha.
 
 Để phát hiện repo tổng còn ghim phiên bản cũ của repo con, chọn nhánh đích và chạy:
