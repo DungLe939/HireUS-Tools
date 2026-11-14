@@ -2,11 +2,15 @@
 
 Workspace đồ án HireUS Tools gồm ba Git submodule:
 
-| Thư mục | Nội dung |
+| Repo con — mở nhánh `main` | Nội dung |
 | --- | --- |
-| [frontend](frontend/README.md) | Ứng dụng Next.js |
-| [backend](backend/README.md) | Máy chủ NestJS |
-| [documents](documents/README.md) | Yêu cầu, thiết kế và bài nộp |
+| [frontend → main](https://github.com/DungLe939/FE-HireUS-Tools/tree/main) | Ứng dụng Next.js |
+| [backend → main](https://github.com/DungLe939/BE-HireUS-Tools/tree/main) | Máy chủ NestJS |
+| [documents → main](https://github.com/DungLe939/Docs-HireUS-Tools/tree/main) | Yêu cầu, thiết kế và bài nộp |
+
+Bấm các liên kết trên để xem `main` hiện tại của từng repo. Trong danh sách file
+của GitHub, các dòng `frontend @ SHA`, `backend @ SHA`, `documents @ SHA` luôn mở
+commit được repo cha ghim; cấu hình `branch = main` không đổi cách điều hướng đó.
 
 ## Lấy dự án
 
