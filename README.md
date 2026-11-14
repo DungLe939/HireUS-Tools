@@ -25,6 +25,12 @@ Lệnh trên checkout phiên bản submodule được repo chính ghi nhận; kh
 lấy nhánh tính năng mới nhất. Mỗi submodule có nhánh và lịch sử Git riêng.
 Kiểm tra trạng thái local trước khi cập nhật.
 
+Cả ba submodule cấu hình `branch = main` trong `.gitmodules`: `main` là nguồn khi
+cập nhật remote của submodule. Clone/checkout bình thường vẫn dùng SHA gitlink đã
+commit ở repo cha, không tự đi theo tip main. Sau khi main repo con đổi, cần cập
+nhật và công bố gitlink cha theo workflow submodule-sync; giữ công việc trên nhánh
+cá nhân, không chạy update --remote để thay thế bước kiểm tra và tích hợp an toàn.
+
 ## Làm việc cùng AI coding agent
 
 Client Gemini qua Trạm Mây cho công cụ local: [cấu hình và cách gọi](scripts/README.md).
