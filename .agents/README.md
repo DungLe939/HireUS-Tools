@@ -8,6 +8,7 @@ Bắt đầu tại [AGENTS.md](../AGENTS.md). Agent không tự nhận skills v�
 | Đọc dự án hoặc tìm yêu cầu mới nhất | [project-navigator](skills/project-navigator/SKILL.md) |
 | Làm một tính năng qua nhiều repo | [hireus-workflow](skills/hireus-workflow/SKILL.md) |
 | Nhắc cập nhật nhánh, chuẩn bị commit/push hoặc xử lý remote đi trước | [team-sync](skills/team-sync/SKILL.md) |
+| Sync repo con và gitlink repo cha, xác minh công bố toàn workspace | [submodule-sync](skills/submodule-sync/SKILL.md) |
 | Rà tài liệu còn đúng không, cập nhật tổng hợp hoặc bỏ bản lỗi thời | [docs-maintenance](../documents/.agents/skills/docs-maintenance/SKILL.md) |
 | Frontend | [hướng dẫn FE](../frontend/AGENTS.md) |
 | Backend, contract và dữ liệu | [hướng dẫn BE](../backend/AGENTS.md) |
@@ -22,12 +23,28 @@ Ví dụ yêu cầu, có thể dùng bằng ngôn ngữ tự nhiên với bất 
 - “Bắt đầu làm Job Matching: kiểm tra nhánh và nhắc phần cần cập nhật trước.”
 - “Chuẩn bị push phần vừa làm: lấy thay đổi remote, rà tài liệu cũ, sửa phần sai và tổng hợp kết quả.”
 - “Push bị non-fast-forward: kiểm tra upstream, tích hợp thay đổi và kiểm tra lại tài liệu.”
+- “Kiểm tra repo tổng có đang ghim commit cũ của repo con không, đích là main.”
+- “Công bố workspace lên main: xử lý repo con, gitlink repo cha và xác minh remote cuối cùng.”
 
 Khi bắt đầu việc có sửa, agent kiểm tra nhánh và nhắc cập nhật một lần nếu cần.
 Trước push, agent đối chiếu tài liệu liên quan, sửa/bỏ bản dẫn xuất đã lỗi thời,
 chạy kiểm tra và tổng hợp thay đổi rồi công bố trong phạm vi đã được yêu cầu.
 Không phải mọi lần push đều cần tải Drive hoặc tạo một báo cáo mới.
 Đây là workflow cho agent đọc, không phải hook tự cài hoặc tác vụ chạy nền.
+
+Với nhiều repo, quy trình chỉ hoàn tất công bố sau khi **repo con đã công bố →
+gitlink được cập nhật → repo cha đã công bố → xác minh live đạt**. Chỉ sync local
+thì báo trạng thái local và phần chưa công bố. Không tự merge mọi nhánh cá nhân.
+
+Kiểm tra submodule (đổi `main` theo nhánh đích):
+
+```bash
+python3 .agents/scripts/check_submodules.py --target main --remote
+```
+
+Script chỉ đọc. Bỏ `--remote` để kiểm tra cache offline; thêm `--json` để agent xử lý.
+Mã thoát 0 = đã khớp live, 1 = cần sync, 2 = chưa xác minh đủ. Giải thích các cột và
+giới hạn tại [hướng dẫn checker](skills/submodule-sync/references/checker.md).
 
 Skills dùng chung nằm ở repo sở hữu chúng; không chép sang config cá nhân.
 Các reviewer `.codex/agents/` là adapter riêng, dẫn về các skill review này.

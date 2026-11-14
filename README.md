@@ -27,12 +27,15 @@ Kiểm tra trạng thái local trước khi cập nhật.
 
 ## Làm việc cùng AI coding agent
 
+Client Gemini qua Trạm Mây cho công cụ local: [cấu hình và cách gọi](scripts/README.md).
+
 Đọc [AGENTS.md](AGENTS.md) để chọn hướng dẫn phù hợp. Mở workspace ở gốc khi
 làm tính năng qua FE/BE; cũng có thể mở riêng từng repo con.
 
 - [Điều hướng dự án](.agents/skills/project-navigator/SKILL.md).
 - [Quy trình triển khai tính năng](.agents/skills/hireus-workflow/SKILL.md).
 - [Cập nhật nhánh, rà tài liệu và chuẩn bị push](.agents/skills/team-sync/SKILL.md).
+- [Đồng bộ gitlink repo cha với repo con](.agents/skills/submodule-sync/SKILL.md).
 - [Sửa/gộp/bỏ tài liệu lỗi thời theo bằng chứng](documents/.agents/skills/docs-maintenance/SKILL.md).
 - [Spec Kit tùy chọn và môi trường chạy](.agents/references/spec-kit.md).
 - [Công cụ tài liệu](documents/.agents/README.md).
@@ -51,6 +54,16 @@ agent đối chiếu tài liệu liên quan, sửa/bỏ bản dẫn xuất lỗi
 hợp đã làm gì, đã kiểm tra gì, phần còn thiếu. Đồng bộ tài liệu không mặc định tải
 Drive; chỉ commit/push khi được yêu cầu. Xem các skill trên cho working tree bẩn,
 conflict, remote đi trước và thứ tự công bố submodule/repo cha.
+
+Để phát hiện repo tổng còn ghim phiên bản cũ của repo con, chọn nhánh đích và chạy:
+
+```bash
+python3 .agents/scripts/check_submodules.py --target main --remote
+```
+
+Lệnh chỉ đọc; không fetch, merge hoặc push. Nó phân biệt checkout local, tip nhánh
+đích và gitlink đã commit/stage/công bố của repo cha. Chỉ báo đồng bộ toàn workspace
+khi kiểm tra live sau công bố đạt; sync repo con trên máy chưa cập nhật gitlink GitHub.
 
 Kiểm tra hướng dẫn và khả năng chia sẻ:
 
